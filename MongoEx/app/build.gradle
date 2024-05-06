@@ -1,5 +1,8 @@
 plugins {
     id 'com.android.application'
+        id 'com.chaquo.python'
+
+
 }
 
 android {
@@ -10,11 +13,19 @@ android {
         applicationId "com.example.mangoexplorer"
         minSdk 24
         targetSdk 33
-        //targetSdkVersion 31
+        maxSdkVersion 33
         versionCode 1
-        versionName "1.0"
+        versionName "1.5"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        ndk {
+            abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+        }
+        python {
+            version "3.11"
+            buildPython "C:/Users/LapStore/AppData/Local/Programs/Python/Python311/python.exe"
+        }
+
     }
     packagingOptions {
         exclude 'META-INF/androidx.cardview_cardview.version'
@@ -26,16 +37,19 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    sourceSets {
+        main {
+            python.srcDir "src/main/python"
+        }
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+
 }
-repositories {
-    //google()
-    //mavenCentral()
-}
+
 dependencies {
     //noinspection GradleCompatible
     implementation 'com.android.support:cardview-v7:28.0.0'
@@ -43,6 +57,11 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.10.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.13.0'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.0'
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'

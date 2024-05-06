@@ -8,7 +8,6 @@ import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,17 +15,20 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.chaquo.python.PyObject;
+import com.chaquo.python.Python;
+import com.chaquo.python.android.AndroidPlatform;
+import com.example.mangoexplorer.Compress_utils.Algorithm;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Map;
 
 
 public class Utils {
@@ -48,7 +50,8 @@ public class Utils {
     public static String typeOfSort=SortType;
     public static final String PREF_NAME="Mango_pref";
     public static int id_theme=4;//id is same as images name but -1
-
+    public static boolean better_performance=false;
+    public static boolean show_welcome_window=true;
     public static LinearLayout getItem(Context parent, String name, int drawableIcon) {
         //example of use :LinearLayout item= Utils.getItem(MainActivity.this,"folder 1",R.drawable.folder)
         LinearLayout icon_layout = getLinearLayout(parent);
@@ -87,6 +90,14 @@ public class Utils {
         icon_layout.addView(icon);
     }
 
+    public static PyObject startPython(AppCompatActivity currentActivity, String module){
+        if (! Python.isStarted()) {
+            Python.start(new AndroidPlatform(currentActivity));
+        }
+        Python py=Python.getInstance();
+        PyObject obj= py.getModule(module);
+        return obj;
+    }
     public static int getFileImage(File file) {
         String[] file_splits = file.getName().split("\\.");
         String extension = file_splits[file_splits.length - 1];//last one is the extension ,to be more general
@@ -111,6 +122,8 @@ public class Utils {
             return R.drawable.txt;
         } else if (extension.equals("apk")) {
             return R.drawable.apk;
+        }else if ((extension.equals(Algorithm.golamb))||(extension.equals(Algorithm.lzw))||(extension.equals(Algorithm.huffman))||(extension.equals(Algorithm.ren_length))||(extension.equals(Algorithm.arthimetric))){
+            return R.drawable.compress_logo;
         }
 
         return R.drawable.general_file;
@@ -183,7 +196,9 @@ public class Utils {
     }
 
     public static File[] sorted(File[] files){
-        Arrays.sort(files,new FileNameComparator(Utils.typeOfSort));
+        if(!Utils.better_performance) {
+            Arrays.sort(files, new FileNameComparator(Utils.typeOfSort));
+        }
         return files;
     }
 
@@ -193,6 +208,8 @@ public class Utils {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("sort type",typeOfSort);
         editor.putInt("theme id",id_theme );
+        editor.putBoolean("perfomance_enhanced",better_performance);
+        editor.putBoolean("Show welcome",show_welcome_window);
         editor.apply();
     }
     public static int getBackFromId(){
@@ -230,6 +247,14 @@ public class Utils {
             }
             return file1.getName().compareTo(file2.getName());//default is name
         }
+    }
+    public static boolean isContain(String[] list ,String item){
+        for (int i=0;i<list.length;i++){
+            if(list[i].equals(item)){
+                return true;
+            }
+        }
+        return false;
     }
 
 }

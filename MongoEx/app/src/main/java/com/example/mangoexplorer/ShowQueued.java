@@ -261,7 +261,9 @@ public class ShowQueued extends AppCompatActivity {
 
     }
     private void setAnimation() {
-        Animation animation = AnimationUtils.loadAnimation(ShowQueued.this, R.anim.layouts);
-        findViewById(R.id.card_middle).startAnimation(animation);
+        if(!Utils.better_performance) {
+            Animation animation = AnimationUtils.loadAnimation(ShowQueued.this, R.anim.layouts);
+            findViewById(R.id.card_middle).startAnimation(animation);
+        }
     }
 }

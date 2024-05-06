@@ -209,6 +209,15 @@
                     android:textColor="@color/white"
                     android:textStyle="bold" />
 
+                <Button
+                    android:id="@+id/compress"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/compression"
+                    android:hint="compress"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
 
             </LinearLayout>
         </HorizontalScrollView>
