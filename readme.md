@@ -4,7 +4,8 @@ Mango file explorer is a small project (simple edition) of fishoned file explore
 
 
 ## requirements
-at least android 7.0
+at least android 7.0 , 
+**have not been tested for android 12+ and may not work**
 ## What App Do:
 - file explorer with features :add /remove /get details /share
 - display recent opened files (**recent**) ,with max 20 
@@ -144,6 +145,81 @@ public static void  addToQueueAndSave(Context context,String fileName, queue que
 - way of using sort to replace each time one folder opened also animation ,and appending to recently with saving to files may making lag 
 - current version not contain unstarring item feature
 - fixed length of queue may solve Memeory problem but not storage ,also when full queue it may take the memory
+
+
+
+
+
+
+
+# Updated V 1.5
+
+## New Features :
+ - Compression Advantage with different Techniques to Text Files
+ - Performance mode that stop some nunecessary algorithms (sort, Animation) to perform faster 
+- Automatic performance mode when low battery
+
+### Details of New Features 
+1- Compression 
+
+## Algorithms
+- Worked with Faculty Team to  implemented Compression techniques (Huffman ,Golamb,LZW,Arthimetric,Run Length) 
+
+
+## Structure :
+- for simplicity algorithms are made in python (and interacted using chaquopy)
+- to actually interact and send numbers : each algorithm has it's on java class
+- All classes extend algorithm class
+- methods in algorithm class are not meant for abstract ,but are Utils commonly used in Compression (to make better code)
+- for better code each class name is known in static variable of algorithm class
+
+## Cycle :
+- First of all To Compress : file is readed as text (StringBuffer **SomeTimes converted to String ,which may case problems**)
+```
+        StringBuffer data_file = Algorithm.readFile(fileToCompress);
+
+```
+- Second File is Read and preapared using it's custom class 
+- Third Send to Python Class to be compressed
+- all results converted to bits **Except for Arthimetric ,just produce json file** ,that stored it self as (each bits chunk stored as int)
+- Prefix bits with 1 (to prevent loss if bits start with 0) than complete byties with 0s
+- Same Cycle for Decompress (but bottom Up)
+
+##### Team Worked in Compression :
+- Walid Tawfik soliman
+- Mazen Mohammed Montiser
+- Reem Ibrahim
+- Mohammed Elshaffay
+- Sondos Khamis
+- Shahd Khalaf
+
+2- Performance
+It uses static boolean, Shared Reference Variable (better_performance) :
+- when Equal True Stop sorting and animation (always checked)
+- When battery is Low make it true
+- When battery is Charging : Make it False
+- For End User :can stop ,apply it anytime
+
+
+
+
+## Added libraries:
+- com.fasterxml.jackson 2.13.0
+- com.chaquo.python 15.0.1
+
+## bugs Solved
+- pefrormance mode helped making application faster (by stopping Animation and Sort)
+- Solved Bug of unexpected redirect in refresh/back
+
+## Bugs in Version 1.5
+- Implemented premession  for reading files using READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE which may not work for high ndroid versions as described by google
+- Compression is limited to text files 
+- Compression may give sometimes unexpected behaviour ,may also negatively increase size
+- UnFamiliarity in compressed extension
+- Lossy Convert from StringBuffer to String
+- For Huffman ,arthimetric : common to increase file size (although propotional)
+- Some text files may not supported (C ,java…..)
+- May get strickled for non ASCII files
 
 ## My email:
 tahaelshrif1@gmail.com

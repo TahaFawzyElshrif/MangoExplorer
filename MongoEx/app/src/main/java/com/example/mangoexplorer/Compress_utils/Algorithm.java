@@ -18,10 +18,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.example.mangoexplorer.R;
 import com.example.mangoexplorer.Utils;
 import com.example.mangoexplorer.explorer;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -32,10 +35,11 @@ public abstract class Algorithm {
     public final static String golamb = "golamb";
     public final static String arthimetric = "arth";
 
-    public static final String[] acceptable_txt_extensions = new String[]{"txt", "csv", "json"};
+    public static final String[] acceptable_txt_extensions = new String[]{"txt", "csv","html","css","sql"};
 
     public static boolean isAcceptable_producied(String extension){
-        if (Utils.isContain(new String[]{huffman,arthimetric, ren_length, golamb},extension)){
+        if (Utils.isContain(new String[]{huffman, ren_length, golamb,"json"},extension)){
+            /////// json as arthimetric saved in json file
             return true;
         }else if(extension.startsWith(lzw)){
             return true;
@@ -45,6 +49,19 @@ public abstract class Algorithm {
             return true;
         }
         return false;
+    }
+    public static  boolean isArthimetricJson(File file){
+        try {
+            Log.d("Exists?",file.exists()+"");
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(file);
+            if((jsonNode.get("Arthimetric_file").toString()).equals("\"5%yyUi\"")){
+                return true;
+            }else{
+                Log.e("exception","not found    "+(jsonNode.get("Arthimetric_file").toString()));
+                return false;
+            }
+        }catch (Exception ex){Log.e("exception",ex.toString());return false;}
     }
     public static StringBuffer readFile(File file) {
         StringBuffer text = new StringBuffer("");
@@ -152,39 +169,7 @@ public abstract class Algorithm {
 
 
 
-    public static void writeCompressUtilityJSON(StringBuffer[] compress_info,String Algorithm,String filePath) throws Exception{
-        switch(Algorithm){
-            case com.example.mangoexplorer.Compress_utils.Algorithm.huffman:{
-                //huff obj=new huff(compress_info[0],compress_info[1].toString());
-                ObjectMapper objectMapper = new ObjectMapper();
-                ObjectNode jsonNode = objectMapper.createObjectNode();
-                jsonNode.put("code_table_string", compress_info[0].toString());
-                jsonNode.put("extension", compress_info[1].toString());
-
-                File file = new File( filePath);
-                objectMapper.writeValue(file, jsonNode);
-
-
-                break;
-            }
-        }
-    }
-
-    public static huff readCompressUtility(String Algorithm,String filePath) throws Exception{
-        switch(Algorithm){
-            case com.example.mangoexplorer.Compress_utils.Algorithm.huffman:{
-                FileInputStream fileInputStream = new FileInputStream(filePath);
-                ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-                huff obj=(huff)objectInputStream.readObject();
-                objectInputStream.close();
-                fileInputStream.close();
-                return obj;
-            }
-        }
-        throw new Exception("No algorithm selected");
-
-    }
-    protected static void setTextAfterCompress(AppCompatActivity context,String data,String original_data,String alpha_code) {
+    protected static void setTextAfterCompress(AppCompatActivity context,String data,String original_data,String alpha_code,boolean is_Artihmetric) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         LayoutInflater inflater = LayoutInflater.from(context);
         View customLayout = inflater.inflate(R.layout.activity_after, null);
@@ -195,8 +180,12 @@ public abstract class Algorithm {
         PyObject obj = Utils.startPython(context, "general");
         text_info +="\n Entropy Of Data :\n"+ obj.callAttr("calc_entropy",original_data).toString();
         text_info +="\n\n Probability of each char :\n"+ obj.callAttr("calc_probability",original_data).toString();
-        text_info +="\n\n Compression ratio :\n"+ obj.callAttr("calc_CR_DATA",original_data,data).toString();
+        if (!is_Artihmetric) {//the version not supporting CR for arthimetric
+            text_info += "\n\n Compression ratio :\n" + obj.callAttr("calc_CR_DATA", original_data, data).toString();
+        }else{//it must arthimetric (for this version)
+            text_info += "\n\n Compressed data :\n" + data;
 
+        }
         if(  alpha_code!=null) {
             text_info += "\n\n Average Length :\n" + obj.callAttr("calc_avg_length", alpha_code, original_data).toString();
             text_info += "\n\n Efficency :\n" + obj.callAttr("calc_efficiency", alpha_code, original_data).toString();

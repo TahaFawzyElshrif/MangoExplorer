@@ -55,7 +55,7 @@ public class golamb  extends Algorithm implements Serializable {
 
 
         SaveCompressed(code, path_compressed + "compressedFile."+golamb+"_"+M+"_"+fileToCompress.getName().split("\\.")[1], fileToCompress.getPath());
-        setTextAfterCompress(context, code.toString(), data_file.toString(), null);
+        setTextAfterCompress(context, code.toString(), data_file.toString(), null,false);
 
     }
 

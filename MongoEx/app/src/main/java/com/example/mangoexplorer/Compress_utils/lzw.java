@@ -64,7 +64,7 @@ public class lzw extends Algorithm implements Serializable {
         int[] encoded_list_integers=CodeStringToArray(encoded.toString());
         StringBuffer code=getCodeLZW(encoded_list_integers);//already padded
         SaveCompressed(code, path_compressed + "compressedFile."+lzw+"_"+fileToCompress.getName().split("\\.")[1], fileToCompress.getPath());
-        setTextAfterCompress(context, code.toString().substring(code.toString().indexOf('1')+1), data_file.toString(), null);
+        setTextAfterCompress(context, code.toString().substring(code.toString().indexOf('1')+1), data_file.toString(), null,false);
 
     }
 

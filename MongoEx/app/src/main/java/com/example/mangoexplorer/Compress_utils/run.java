@@ -38,7 +38,7 @@ public class run  extends Algorithm implements Serializable {
 
 
         SaveCompressed(encoded_str_string_freq, path_compressed + "compressedFile."+ren_length+"_"+fileToCompress.getName().split("\\.")[1], fileToCompress.getPath());
-        setTextAfterCompress(context, encoded_str_string_freq.toString().substring(encoded_str_string_freq.toString().indexOf('1')+1), data_file.toString(), null);
+        setTextAfterCompress(context, encoded_str_string_freq.toString().substring(encoded_str_string_freq.toString().indexOf('1')+1), data_file.toString(), null,false);
 
     }
     private static String convertString(String s){

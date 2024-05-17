@@ -1,6 +1,7 @@
 package com.example.mangoexplorer;
 
 
+import static com.example.mangoexplorer.Compress_utils.Algorithm.arthimetric;
 import static com.example.mangoexplorer.Compress_utils.Algorithm.golamb;
 import static com.example.mangoexplorer.Compress_utils.Algorithm.lzw;
 import static com.example.mangoexplorer.Compress_utils.Algorithm.ren_length;
@@ -353,6 +354,9 @@ public class explorer extends AppCompatActivity {
                                             }case ren_length: {
                                                 com.example.mangoexplorer.Compress_utils.run.Compress(explorer.this, selected_file);
                                                 break;
+                                            }case arthimetric:{
+                                                com.example.mangoexplorer.Compress_utils.arth.Compress(explorer.this, selected_file);
+                                                break;
                                             }
 
                                         }
@@ -378,6 +382,9 @@ public class explorer extends AppCompatActivity {
 
                                             if (extension.equals(Algorithm.huffman)) {
                                                 huff.DeCompress(explorer.this, selected_file);
+
+                                            }else if (extension.equals("json") && Algorithm.isArthimetricJson(selected_file)) {
+                                                com.example.mangoexplorer.Compress_utils.arth.DeCompress(explorer.this, selected_file);
 
                                             } else if (extension.startsWith(lzw)) {
                                                 com.example.mangoexplorer.Compress_utils.lzw.DeCompress(explorer.this, selected_file);

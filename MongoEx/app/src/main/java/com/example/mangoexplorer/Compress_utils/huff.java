@@ -104,7 +104,7 @@ public class huff extends Algorithm implements Serializable {
         huff.writeCompressUtilityJSON(alpha_code, fileToCompress.getName().split("\\.")[1], path_compressed + "inf_huff.json");
 
         Utils.showDialog(context, "INF file has been created ,note removing this file may affect decompressing later");
-        setTextAfterCompress(context, compression_data.toString(), data_file.toString(), alpha_code.toString());
+        setTextAfterCompress(context, compression_data.toString(), data_file.toString(), alpha_code.toString(),false);
 
 
     }
